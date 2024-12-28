@@ -47,5 +47,5 @@ func TestMainHandlerWhenCountMoreThanTotalCafeList(t *testing.T) {
 	bodyStr := responseRecorder.Body.String()
 	listCafe := strings.Split(bodyStr, ",")
 
-	require.LessOrEqual(t, len(listCafe), totalCount)
+	assert.Equal(t, len(listCafe), totalCount)
 }
