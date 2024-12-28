@@ -17,8 +17,8 @@ func TestMainHandlerCorrectRequest(t *testing.T) {
 	handler := http.HandlerFunc(mainHandle)
 	handler.ServeHTTP(responseRecorder, req)
 
-	assert.Equal(t, http.StatusOK, responseRecorder.Code)
-	assert.NotEmpty(t, responseRecorder.Body)
+	require.Equal(t, http.StatusOK, responseRecorder.Code)
+	require.NotEmpty(t, responseRecorder.Body)
 }
 
 func TestMainHandlerIncorrectCity(t *testing.T) {
@@ -28,8 +28,8 @@ func TestMainHandlerIncorrectCity(t *testing.T) {
 	handler := http.HandlerFunc(mainHandle)
 	handler.ServeHTTP(responseRecorder, req)
 
+	require.Equal(t, http.StatusBadRequest, responseRecorder.Code)
 	require.NotEmpty(t, responseRecorder.Body)
-	assert.Equal(t, http.StatusBadRequest, responseRecorder.Code)
 	assert.Equal(t, "wrong city value", responseRecorder.Body.String())
 }
 
@@ -40,8 +40,8 @@ func TestMainHandlerWhenCountMoreThanTotalCafeList(t *testing.T) {
 	handler := http.HandlerFunc(mainHandle)
 	handler.ServeHTTP(responseRecorder, req)
 
+	require.Equal(t, http.StatusOK, responseRecorder.Code)
 	require.NotEmpty(t, responseRecorder.Body)
-	assert.Equal(t, http.StatusOK, responseRecorder.Code)
 
 	totalCount := 4
 	bodyStr := responseRecorder.Body.String()
