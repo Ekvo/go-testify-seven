@@ -69,9 +69,13 @@ func TestMainHandlerWhenCountMoreThanTotalCafeList(t *testing.T) {
 	//=== RUN   TestMainHandlerWhenCountMoreThanTotalCafeList
 	//--- PASS: TestMainHandlerWhenCountMoreThanTotalCafeList (7.80s)
 	//PASS
-	loop := rand.Intn(1_000_000)
+	require.NotEmpty(t, cafeList)
+	require.NotEmpty(t, cafeList["moscow"])
 
-	for num := 1; num < loop; num++ {
+	start := len(cafeList["moscow"]) + 1
+	loop := rand.Intn(1_000_000) + start
+
+	for num := start; num < loop; num++ {
 
 		req := httptest.NewRequest(http.MethodGet, fmt.Sprintf("/cafe?count=%d&city=moscow", num), nil)
 
@@ -81,13 +85,9 @@ func TestMainHandlerWhenCountMoreThanTotalCafeList(t *testing.T) {
 
 		require.NotEmpty(t, responseRecorder.Code)
 		require.NotEmpty(t, responseRecorder.Body)
-		require.NotEmpty(t, cafeList)
 
 		assert.Equal(t, http.StatusOK, responseRecorder.Code)
 
-		require.NotEmpty(t, cafeList["moscow"])
-
-		totalCount := len(cafeList["moscow"])
 		bodyStr := responseRecorder.Body.String()
 		listCafe := strings.Split(bodyStr, ",")
 
